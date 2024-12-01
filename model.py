@@ -8,17 +8,33 @@ import numpy as np
 from testing import accuracy
 from helper import contrastive_loss, shuffle
 
-# Constants:
+# TO CHANGE:
 learning_rate = 1e-4 #1e-4
 small_batch = 20
 batch_size = 120
 num_epochs = 8
 test_train_split = 0.7
 l2_regularization = 1e-5 #1e-5
+model = 'BERT' # Can choose between {'BERT', 'ALBERT', 'ROBERTA'}
 
-# Load BERT model
-tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-model = BertModel.from_pretrained('bert-base-uncased')
+# BERT model
+if model == 'BERT':
+    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+    model = BertModel.from_pretrained('bert-base-uncased')
+
+# ALBERT model
+if model == 'ALBERT':
+    from transformers import AlbertModel, AlbertTokenizer
+    tokenizer = AlbertTokenizer.from_pretrained('albert-base-v2')
+    model = AlbertModel.from_pretrained('albert-base-v2')
+
+# ROBERTA model
+if model == 'ROBERTA':
+    from transformers import RobertaModel, RobertaTokenizer
+    tokenizer = RobertaTokenizer.from_pretrained('roberta-base')
+    model = RobertaModel.from_pretrained('roberta-base')
+
+# Train and initialize model
 model.train()
 optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate, weight_decay = l2_regularization)
 
@@ -34,7 +50,6 @@ def get_embedding(word):
 full_df = load_data()
 
 dates = full_df['date'].unique()
-print(dates)
 dates_train, dates_test = train_test_split(dates, train_size = test_train_split)
 
 df_train = full_df[full_df['date'].isin(dates_train)].sort_values(by=['date', 'level']).reset_index(drop=True)
