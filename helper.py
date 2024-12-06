@@ -3,7 +3,10 @@ import pandas as pd
 import itertools
 
 # Calculate contrastive loss
-def contrastive_loss(embed_1, embed_2, label, m=1.0):   
+def contrastive_loss(embed_1, embed_2, label, m=1.0): 
+    '''
+    Calculates contrastive loss between two embeddings
+    '''
     cosine_similarity = F.cosine_similarity(embed_1, embed_2)
     distance = 1 - cosine_similarity
     if label == 1:  # not in same group
@@ -13,6 +16,9 @@ def contrastive_loss(embed_1, embed_2, label, m=1.0):
 
 # Shuffle training data
 def shuffle(full_data, dates):
+    '''
+    Turns each puzzle grouping into 120 word pairings with a flag for group label
+    '''
     df_shuffled = pd.DataFrame(columns=['word_1', 'word_2', 'same_group'])
 
     for date in dates:

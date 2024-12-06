@@ -2,6 +2,9 @@ import json
 import pandas as pd
 
 def load_data():
+    '''
+    Turning json file into pandas dataframe
+    '''
     file = open('connections.json')
     connections = json.load(file)
     file.close()
