@@ -16,7 +16,10 @@ small_batch = 10
 batch_size = 40
 num_epochs = 2
 l2_regularization = [1e-2, 1e-3, 1e-5]
+start_date = datetime.strptime("2023-09-01", "%Y-%m-%d") # Define the start of CV range
+end_date = datetime.strptime("2023-09-15", "%Y-%m-%d") # Define the start of CV range
 
+# Initial set-up
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 model = BertModel.from_pretrained('bert-base-uncased')
 model.train()
@@ -30,7 +33,6 @@ def get_embedding(word):
     outputs = model(**inputs)
     embedding = outputs.last_hidden_state.mean(dim=1)  # Average pooling over token embeddings
     return embedding
-
 
 def bert_fine_tune(df_train_new, optimizer):
     '''
@@ -99,23 +101,14 @@ def bert_fine_tune(df_train_new, optimizer):
 
 
 
-
 # Load data and split into train/test for CV
 full_df = load_data()
-
 dates = full_df['date'].unique()
 from datetime import datetime
 
-# Define the start and end of the range
-start_date = datetime.strptime("2023-09-01", "%Y-%m-%d")
-end_date = datetime.strptime("2023-09-15", "%Y-%m-%d")
-
 # Filter dates within the range
 cv_dates = [x for x in dates if start_date <= datetime.strptime(x, "%Y-%m-%d") <= end_date]
-
 cv_df = full_df[full_df['date'].isin(cv_dates)]
-
-
 
 def train_and_validate(cv_df_new, val_data, lr, wd):
     '''
@@ -154,9 +147,8 @@ def train_and_validate(cv_df_new, val_data, lr, wd):
     return val_loss/n
 
 
-val_list = {}
-
 # Performs k-fold cross-validation
+val_list = {}
 for lr in learning_rate:
     for wd in l2_regularization:
         val = []
@@ -171,14 +163,12 @@ for lr in learning_rate:
             val_data = full_df[full_df['date'].isin(cv_dates_val)].sort_values(by=['date', 'level']).reset_index(drop=True)
 
             cv_df_new = shuffle(train_data, cv_dates_train)
-
             val_df_new = shuffle(val_data, cv_dates_val)
             
             val_fold_loss = train_and_validate(cv_df_new, val_df_new, lr, wd)
             val.append(val_fold_loss)
 
         avg_val = sum(val) / len(val)
-        print(lr, wd, avg_val)
         val_list[(lr, wd)] = avg_val
 
 # Print final results

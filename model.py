@@ -9,13 +9,12 @@ from testing import accuracy, compute_metrics_from_cm
 from helper import contrastive_loss, shuffle
 
 # TO CHANGE:
-learning_rate = 1e-5 #1e-4
+learning_rate = 1e-5
 small_batch = 20
 batch_size = 120
 num_epochs = 8
 test_train_split = 0.7
-regularize_change = False
-l2_regularization = 0.01 #1e-5
+l2_regularization = 0.01
 model = 'BERT' # Can choose between {'BERT', 'DISTILBERT', 'ROBERTA'}
 
 # BERT model
@@ -37,10 +36,7 @@ if model == 'ROBERTA':
 
 # Train and initialize model
 model.train()
-if regularize_change:
-    optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate, weight_decay=l2_regularization)
-else:
-    optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
+optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate, weight_decay=l2_regularization)
 
 # Get embeddings
 def get_embedding(word):
@@ -152,8 +148,7 @@ print("Baseline accuracy (array): ", base_array_acc)
 precision, recall, f1, specificity = compute_metrics_from_cm(base_cm)
 print(f"Precision: {precision}, Recall: {recall}, F1-Score: {f1}, Specificity: {specificity}")
 
-
-# Testing
+# Epoch loss
 result = bert_fine_tune(df_train_new)
 print("Epoch loss: ", result)
 
