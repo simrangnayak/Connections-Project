@@ -6,11 +6,9 @@ This project provides a transformer-model approach to solving the **NYT Connecti
 1. [Introduction](#introduction)
 2. [Project Structure](#project-structure)
 3. [Model Workflow](#model-workflow)
-4. [Metrics and Evaluation](#metrics-and-evaluation)
-5. [Installation](#installation)
-6. [Usage](#usage)
-7. [Contributing](#contributing)
-8. [License](#license)
+4. [Performance Metrics}](#performance-metrics)
+5. [Customizing Visualizations](#customizing-visualizations)
+6. [Installation](#installation)
 
 ---
 
