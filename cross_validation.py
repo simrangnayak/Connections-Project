@@ -3,21 +3,20 @@ import torch
 import torch.nn.functional as F
 import pandas as pd
 from processing import load_data
-from sklearn.model_selection import train_test_split
 import numpy as np
-from testing import accuracy
 from helper import contrastive_loss, shuffle
 from sklearn.model_selection import KFold
 from datetime import datetime
 
 # TO CHANGE:
 learning_rate = [1e-5, 1e-4, 1e-2]
-small_batch = 10
-batch_size = 40
-num_epochs = 2
 l2_regularization = [1e-2, 1e-3, 1e-5]
+k = 5 # k-fold CV, set at 5
 start_date = datetime.strptime("2023-09-01", "%Y-%m-%d") # Define the start of CV range
 end_date = datetime.strptime("2023-09-15", "%Y-%m-%d") # Define the start of CV range
+small_batch = 10 # change if using smaller dataset than training set
+batch_size = 40 # change if using smaller dataset than training set
+num_epochs = 2 # change if using smaller dataset than training set
 
 # Initial set-up
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
@@ -153,7 +152,7 @@ for lr in learning_rate:
     for wd in l2_regularization:
         val = []
         
-        kfold = KFold(n_splits = 5, shuffle = True, random_state=42)
+        kfold = KFold(n_splits = k, shuffle = True, random_state=42)
 
         for fold, (train_indices, val_indices) in enumerate(kfold.split(cv_dates)):
             cv_dates_train = [cv_dates[i] for i in train_indices]
