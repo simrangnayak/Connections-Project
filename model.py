@@ -26,7 +26,7 @@ if model == 'BERT':
 # DISTILBERT model
 if model == 'DISTILBERT':
     from transformers import AutoModel, AutoTokenizer
-    tokenizer = AutoTokenizer.from_pretrained('distilbert/distilbert-base-uncased')
+    tokenizer = AutoTokenizer.from_pretrained('distilbert/w to')
     model = AutoModel.from_pretrained('distilbert/distilbert-base-uncased')
 
 # ROBERTA model
