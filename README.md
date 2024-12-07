@@ -20,12 +20,12 @@ The **NYT Connections puzzle** involves grouping words into predefined categorie
 ## Project Structure
 The repository is organized as follows:
 - **Code Files**:
-  - `model.py`: Contains the BERT model definition and training logic.
-  - `helper.py`: Utility functions for data manipulation and evaluation.
-  - `testing.py`: Script for evaluating the model on test puzzles.
-  - `processing.py`: Preprocessing scripts for data preparation.
+  - `model.py`: Defines the BERT-based fine-tuning model and training logic.
+  - `helper.py`: Utility functions for data manipulation, including shuffling and contrastive loss function.
+  - `testing.py`: Script for evaluating the model.
+  - `processing.py`: Handles data preprocessing, including formatting for model input.
   - `plots.py`: Functions to generate and save evaluation plots (e.g., epoch loss, confusion matrices).
-  - `cross_validation.py`: Implements k-fold cross-validation for hyperparameter tuning.
+  - `cross_validation.py`: Implements cross-validation logic for fine-tuning hyperparameters.
 - **Data**:
   - `connections.json`: The main dataset containing puzzle words and their correct groupings.
 - **Outputs**:
@@ -37,27 +37,36 @@ The repository is organized as follows:
    - Extract word embeddings from a pre-trained **BERT model**.
    - Organize data for training, validation, and testing.
 2. **Training**:
-   - Fine-tune the model based on contrastive loss
+   - Fine-tune the model based on contrastive loss, which helps in learning to differentiate between pairs of words that belong to different categories.
    - Use k-fold cross-validation to optimize hyperparameters.
 3. **Evaluation**:
-   - Use metrics (pairwise accuracy, F1-score, specificity) to evaluate the model.
+   - Use metrics (pairwise weighted accuracy, F1-score, specificity) to evaluate the model.
    - Generate epoch loss graphs and confusion matrices for visualization.
 
-## Metrics and Evaluation
-The project evaluates performance using word pairings:
+## Performance Metrics
+The project evaluates performance using the following:
 - **Accuracy**: Weighted accuracy of word pairings
-- **F1-Score**: Harmonic mean of precision and recall (note: in this project, precision, recall, and F1-score are all symmetric).
-- **Specificity**: Proportion of true negatives correctly identified.
-- **Confusion Matrix**: Breakdown of true/false positives and negatives.
+- **F1-Score**: Harmonic mean of precision and recall (note: in this project, precision and recall are symmetric)
+- **Specificity**: Proportion of true negatives correctly identified
+- **Confusion Matrix**: Breakdown of true/false positives and negatives
 
-Visualizations include:
-- Epoch loss graphs
-- Confusion matrix heatmaps
+Metrics are reported for:
+- **Training Set**: Post-training metrics
+- **Test Set**:
+  - **Baseline Metrics**: Before fine-tuning
+  - **Fine-Tuned Metrics**: After fine-tuning the model
+  - **Epoch Loss**
+
+### Customizing Visualizations
+To adjust model outputs and visualizations:
+1. Modify the model configuration in **`model.py`** (e.g., learning rate, batch size) under the # TO CHANGE section.
+2. Update cross-validation settings in **`cross_validation.py`** under the # TO CHANGE section.
+3. Extend visualizations in **`plots.py`** using logged metrics. Plots will be saved in the `plots/` directory.
 
 ## Installation
 ### Prerequisites
 - Python 3.8+
-- Required libraries: PyTorch, NumPy, Scikit-learn, Matplotlib, JSON
+- Required libraries: PyTorch, Transformers, NumPy, Pandas, Scikit-learn, Matplotlib, JSON, Seaborn
 
 ### Installation Steps
 1. Clone the repository:
