@@ -43,7 +43,7 @@ plt.savefig(os.path.join('plots', 'bert_layers.png'))
 
 # Create the optimal BERT plot
 plt.figure(figsize=(8, 5))
-plt.plot(epochs, bert_baseline, marker='o', linestyle='-', color='b', label='Optimal LR and WD')
+plt.plot(epochs, bert_optimal, marker='o', linestyle='-', color='b', label='Optimal LR and WD')
 plt.title('Optimal BERT Hyper-parameters', fontsize=14)
 plt.xlabel('Epoch', fontsize=12)
 plt.ylabel('Loss', fontsize=12)
